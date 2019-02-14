@@ -32,9 +32,10 @@ def ident( matrix ):
 #m1 * m2 -> m2
 def matrix_mult( m1, m2 ):
     for r in range( len(m1) ):
-        for c in range( len(m2[:]) ):
-            copy = m2[:][c]
+        for c in range( len(m2[0]) ):
+            copy = [ item[c] for item in m2 ]
 
+            #print(copy)
             m2[r][c] = mult_helper(m1[r], copy)
 
 def mult_helper(r1, r2):
