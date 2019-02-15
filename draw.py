@@ -37,8 +37,9 @@ def draw_shape( x_org, y_org, x0, y0, sides, matrix ):
     points - [[x0], [y0]]
     
     for i in range(sides - 1):
-            x_new = (x0 - x_org) * (math.cos( 2 * 3.14 * i / sides)) - (y0 - y_org) * (math.cos( 2 * 3.14 * i / sides))
-            y_new = (x0 - x_org) * (math.sin( 2 * 3.14 * i / sides)) + (y0 - y_org) * (math.sin( 2 * 3.14 * i / sides))
+        x_new = (x0 - x_org) * (math.cos( 2 * 3.14 * i / sides))
+        x_new -= (y0 - y_org) * (math.cos( 2 * 3.14 * i / sides))
+        y_new = (x0 - x_org) * (math.sin( 2 * 3.14 * i / sides)) + (y0 - y_org) * (math.sin( 2 * 3.14 * i / sides))
 
             x_new = int(x_new)
             y_new = int(y_new)
