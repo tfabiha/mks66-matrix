@@ -1,6 +1,6 @@
 from display import *
 from matrix import *
-
+from math import *
 
 def draw_lines( matrix, screen, color ):
     i = 0
@@ -30,8 +30,27 @@ def add_point( matrix, x, y, z=0 ):
 
     #print_matrix(matrix)
 
+def draw_shape( x_org, y_org, x0, y0, sides, matrix ):
+    if sides < 3:
+        return
 
+    points - [[x0], [y0]]
+    
+    for i in range(sides - 1):
+            x_new = (x0 - x_org) * (math.cos( 2 * 3.14 * i / sides)) - (y0 - y_org) * (math.cos( 2 * 3.14 * i / sides))
+            y_new = (x0 - x_org) * (math.sin( 2 * 3.14 * i / sides)) + (y0 - y_org) * (math.sin( 2 * 3.14 * i / sides))
 
+            x_new = int(x_new)
+            y_new = int(y_new)
+
+            points[0].append(x_new)
+            points[1].append(y_new)
+
+     for i in range(sides - 1):
+         add_edge( matrix, points[0][i], points[1][i], 0, points[0][i+1], points[1][i+1], 0)
+
+     add_edge( matrix, points[0][0], points[0][1], 0, points[0][-1], points[1][-1], 0)
+        
 def draw_line( x0, y0, x1, y1, screen, color ):
 
     #swap points if going right -> left
