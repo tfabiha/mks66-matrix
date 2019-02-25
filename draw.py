@@ -30,28 +30,145 @@ def add_point( matrix, x, y, z=0 ):
 
     #print_matrix(matrix)
 
-def draw_shape( x_org, y_org, x0, y0, sides, matrix ):
-    if sides < 3:
-        return
+def something( matrix, org_x, org_y, top_x, top_y):
 
-    points - [[x0], [y0]]
-    
-    for i in range(sides - 1):
-        x_new = (x0 - x_org) * (math.cos( 2 * 3.14 * i / sides))
-        x_new -= (y0 - y_org) * (math.cos( 2 * 3.14 * i / sides))
-        y_new = (x0 - x_org) * (math.sin( 2 * 3.14 * i / sides)) + (y0 - y_org) * (math.sin( 2 * 3.14 * i / sides))
+    counter = 100
+    while( counter > 0):#org_x != top_x, org_y != top_y ):
 
-            x_new = int(x_new)
-            y_new = int(y_new)
-
-            points[0].append(x_new)
-            points[1].append(y_new)
-
-     for i in range(sides - 1):
-         add_edge( matrix, points[0][i], points[1][i], 0, points[0][i+1], points[1][i+1], 0)
-
-     add_edge( matrix, points[0][0], points[0][1], 0, points[0][-1], points[1][-1], 0)
+        add_edge( matrix, top_x - top_y + org_y, top_y - top_x + org_x, 0,
+                          top_x + top_y - org_y, top_y + top_x - org_x, 0)
+        '''
+        draw_line(top_x - top_y + org_y, top_y - top_x + org_x,
+                  top_x + top_y - org_y, top_y + top_x - org_x,
+                  screen, [(top_x + 50) % 255, (top_y + 70) % 255, (top_x + top_y + 20) % 255])
+        '''
         
+        top_x -= 5
+        org_y -= 5
+        counter -= 1
+
+def render( matrix ):
+
+    org_x = 100
+    org_y = 100
+
+    block = 8
+    num_blocks = 26
+    
+    
+    add_edge( matrix,
+              org_x, org_y, 0,
+              org_x, org_y + block * num_blocks, 0)
+    add_edge( matrix,
+              org_x, org_y + block * num_blocks, 0,
+              org_x + block * num_blocks / 2, org_y + block * num_blocks, 0)
+    add_edge( matrix,
+              org_x + block * num_blocks / 2, org_y + block * num_blocks, 0,
+              org_x + block * num_blocks / 2, org_y + block * num_blocks / 2, 0)
+    add_edge( matrix,
+              org_x + block * num_blocks / 2, org_y + block * num_blocks / 2, 0,
+              org_x + block * num_blocks, org_y + block * num_blocks / 2, 0)
+    add_edge( matrix,
+              org_x + block * num_blocks, org_y + block * num_blocks / 2, 0,
+              org_x + block * num_blocks, org_y, 0)
+    add_edge( matrix,
+              org_x, org_y, 0,
+              org_x + block * num_blocks, org_y, 0)
+
+    # render front big
+    num = 0
+    
+    while num < num_blocks:
+
+        if num < num_blocks / 2:
+            add_edge( matrix,
+                      org_x, org_y + block * num, 0,
+                      org_x + block * num_blocks, org_y + block * num, 0)
+        else:
+            add_edge( matrix,
+                      org_x, org_y + block * num, 0,
+                      org_x + block * num_blocks / 2, org_y + block * num, 0)
+            
+        num += 1
+
+    UL_x = org_x
+    UL_y = org_y + block * num_blocks
+
+    UUL_x = UL_x + block * num_blocks / 2
+    UUL_y = UL_y + block * num_blocks / 2
+
+    add_edge( matrix,
+              UUL_x, UUL_y, 0,
+              UUL_x + block * num_blocks, UUL_y, 0)
+    
+    add_edge( matrix,
+              UL_x, UL_y, 0,
+              UUL_x, UUL_y, 0)
+
+    add_edge( matrix,
+              UL_x + block * num_blocks / 2, UL_y, 0,
+              UL_x + block * num_blocks / 2 + block * num_blocks / 4, UL_y + block * num_blocks / 4, 0)
+
+    add_edge( matrix,
+              UL_x + block * num_blocks / 2, UL_y, 0,
+              UL_x + block * num_blocks / 2 + block * num_blocks / 4, UL_y + block * num_blocks / 4, 0)
+
+    add_edge( matrix,
+              UL_x + block * num_blocks / 2 + block * num_blocks / 4, UL_y + block * num_blocks / 4, 0,
+              UL_x + block * num_blocks + block * num_blocks / 4, UL_y + block * num_blocks / 4, 0)
+
+    num = 0
+
+    while num < num_blocks:
+        num += 1
+        
+        if num < num_blocks / 2:
+            add_edge( matrix,
+                      UL_x + block * num, UL_y, 0,
+                      UUL_x + block * num, UUL_y, 0)
+        else:
+            add_edge( matrix,
+                      UL_x + block * num + block * num_blocks / 4, UL_y + block * num_blocks / 4, 0,
+                      UUL_x + block * num, UUL_y, 0)
+            
+
+
+    SLL_x = org_x + block * num_blocks
+    SLL_y = org_y
+
+    SLR_x = SLL_x + block * num_blocks
+    SLR_y = SLL_y + block * num_blocks / 2
+
+    add_edge( matrix,
+              SLL_x, SLL_y, 0,
+              SLL_x + block * num_blocks / 2, SLL_y + block * num_blocks / 2, 0)
+
+    add_edge( matrix,
+              SLL_x, SLL_y + block * num_blocks / 2, 0,
+              SLL_x + block * num_blocks / 4, SLL_y + block * num_blocks * 3 / 4, 0)
+    
+    num = 0
+
+    while num < num_blocks:
+        num += 1
+        
+        x = SLL_x + block * num / 2
+        y = SLL_y + block * num / 2
+        
+        if num < num_blocks / 2:
+            
+            add_edge( matrix,
+                      x, y, 0,
+                      x, y + block * num_blocks / 2, 0)
+        else:
+            add_edge( matrix,
+                      x, y, 0,
+                      x, y + block * num_blocks, 0)
+            
+        
+    
+    
+    
 def draw_line( x0, y0, x1, y1, screen, color ):
 
     #swap points if going right -> left
